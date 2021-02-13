@@ -9,6 +9,7 @@ class FunctionObject {
   SpamMessage	( sMsg_and_iIt ){	SpamMessage( sMsg_and_iIt );			}
   WaveMessage	( sMessage ){		WaveMessage( sMessage );			}
   CharMessage	( sMessage ){		CharMessage( sMessage );			}
+  UwUMessage	( sMessage ){		UwUMessage( sMessage );				}
 
   // admin+ commands
   StopSpamming  ( NO_AGRUMENTS ){	StopSpamming( );				} 
@@ -18,7 +19,7 @@ class FunctionObject {
   // owner commands
   ChangePrefix	( sNewPrefix ){ 	ChangePrefix( sNewPrefix ); 			}
   ChangeName	( sName ){		ChangeName( sName );				}  
-  Admin		( RA_and_sName ){	Admin( RA_and_sName );				}  //Finished, not tested in a groupchat yet
+  Admin		( RA_and_sName ){	Admin( RA_and_sName );				}  
   InstaReply	( sMsg ){		InstaReply( sMsg );				}
   CopyCat	( NO_ARGUMENTS ){	ToggleCopyCat( );				}
 }
@@ -59,6 +60,7 @@ const aFunctions =
   [ "[p]spam" , "[message] [amount of times {max = "+iIt_limit+"}]" , "Spam a message an x amount of times" , [ "[p]sp" ] ],
   [ "[p]wave" , "[message {max length = "+iChar_limit+"}]" , "Send a message like a wave" , [ "[p]w" ] ],
   [ "[p]char" , "[message {max length = "+iChar_limit+"}]" , "Send a message for every char" , [ "[p]ch" ] ],
+  [ "[p]uwu" , "[message {optional}]" , "UwU-izes your message" , [ "" ] ],
   [ "[p]stop" , "" , "Empties the spam queue" , [ "[p]s" ] ],
   [ "[p]botname" , "[new name]" , "Changes the name of the bot" , [ "[p]bn" ] ],
   [ "[p]grouplist" , "" , "Shows everyone's roles" , [ "[p]glist" , "[p]gl" ] ],
@@ -76,6 +78,7 @@ const aCallFuncs =
   [ "spam" , "sp" , "SpamMessage" ],
   [ "wave" , "w" , "WaveMessage" ],
   [ "char" , "ch" , "CharMessage" ],
+  [ "uwu" , "UwUMessage" ],
   [ "stop" , "s" , "StopSpamming" ],
   [ "botname" , "bn" , "ChangeBotName" ],
   [ "grouplist" , "glist" , "gl" , "ShowGroupList" ],
@@ -206,6 +209,34 @@ function CharMessage( sMessage ){
   
   aMessageQueue.push( [ sMessage, sMessage.length, 'char', 0 ] );
   
+}
+
+
+
+/////////////////////////   UwU-ize messages   ///////////////////////
+
+const aUwUexceptions = ["think","thank","othe","to ","you","dad","mom","th ","th","l","r","\n"];
+const aUwUcorrected = ["fink","fank","ofe","tuwu ","yuw","daddy","mommy","f","d","w","w","UwU\n"];
+
+function UwUMessage( sMessage ){
+	
+  if( sMessage === "" )
+	sMessage = GetPreviousMessage( );
+
+  for(let i = 0; i < aUwUexceptions.length; i++){
+	  
+    sMessage = sMessage
+            .split( aUwUexceptions[ i ] )
+              .join( aUwUcorrected[ i ] );
+			  
+    sMessage = sMessage
+             .split( CapFirst( aUwUexceptions[ i ] ) )
+               .join( CapFirst( aUwUcorrected[ i ] ) );
+
+  }
+
+  Send( sMessage + " UwU" );
+
 }
 
 
@@ -468,17 +499,19 @@ function InstaReply( sMsg ){
 	  Send(`_Disabled insta reply_`);
 	  
 	} else if( sMsg != "" ) {
-	  
+		
 	  if( IsCommand( sMsg ) )
 		sMsg = sMsg.slice( sPrefix.length );
 	  
 	  sInstareplymsg = sMsg;
 	  bDoReply = true;
+	  
 	  Send(`_Now replying to messages with *${sMsg}*_`);
 	  
 	}
   } else {
   
+    Send(`_You can't run this command_`);
   
   }
 }
@@ -493,10 +526,8 @@ function ToggleCopyCat( ){
 	  
     bCopyCat = !bCopyCat;
   
-    if( bCopyCat ){
-	  Send( `CopyCat is now ${(bCopyCat)? "*enabled.*" : "*disabled.*" }` );
+    Send( `CopyCat is now ${(bCopyCat)? "*enabled.*" : "*disabled.*" }` );
 	  
-	}
   } else {
 	  
   }
@@ -597,6 +628,22 @@ function Send( input ) {
 
 
 
+/////////////////////////   Capitalize the first char of a string   /////////////////////////
+
+function CapFirst( sMessage ) {
+
+  return sMessage
+           .charAt( 0 )
+             .toUpperCase( ) 
+
+          + sMessage
+            .slice( 1 );
+
+}
+
+
+
+
 /////////////////////////   Get the latest message   /////////////////////////
 
 // GetLatestMessage gets the last message that you've send or recieved and returns it as a string
@@ -606,6 +653,17 @@ function GetLatestMessage( ){
   
 }
 
+
+
+/////////////////////////   Get the previous message   /////////////////////////
+
+
+// GetPreviousMessage gets the one-to-last message that you've send and or received and it returns it as a string
+function GetPreviousMessage( ){
+
+  return document.querySelector( `#main > div > div > div > div > div:nth-last-of-type(2) > div > div > div > div > div > span > span` ).innerHTML;
+
+}
 
 
 /////////////////////////   Get the at time af the latest message   /////////////////////////
