@@ -215,8 +215,8 @@ function CharMessage( sMessage ){
 
 /////////////////////////   UwU-ize messages   ///////////////////////
 
-const aUwUexceptions = ["think","thank","othe","to ","you","dad","mom","th ","th","l","r","\n"];
-const aUwUcorrected = ["fink","fank","ofe","tuwu ","yuw","daddy","mommy","f","d","w","w","UwU\n"];
+const aUwUexceptions = ["thin","thank","othe","to ","you","dad","mom","th ","th","l","r"];
+const aUwUcorrected = ["fin","fank","ofe","tuwu ","yuw","daddy","mommy","f","d","w","w"];
 
 function UwUMessage( sMessage ){
 	
