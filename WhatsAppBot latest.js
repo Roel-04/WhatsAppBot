@@ -1,5 +1,5 @@
 /////////////////////////   Call functions here   /////////////////////////
-// I wrote this so I don't have to use eval(), which is quite unsafe
+// I wrote this so I don't have to use eval()
 
 class FunctionObject {
   
