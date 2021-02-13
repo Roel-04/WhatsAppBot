@@ -33,7 +33,7 @@ let sOwner = "message-out"; //the person who set up the bot is also main admin o
 
 let sChatName = "";
 let sBotName = "";
-let sOwnerName = "The one who runs this bot";
+let sOwnerName = "the cunt making me work";
 
 // sOldText contains the innerHTML of the loaded messages as a string
 let sOldText = "";
@@ -219,7 +219,9 @@ const aUwUexceptions = ["thin","thank","othe","to ","you","dad","mom","th ","th"
 const aUwUcorrected = ["fin","fank","ofe","tuwu ","yuw","daddy","mommy","f","d","w","w"];
 
 function UwUMessage( sMessage ){
-	
+  
+  sMessage = RemovePrefixFromSpam( sMessage );
+  
   if( sMessage === "" )
 	sMessage = GetPreviousMessage( );
 
@@ -925,4 +927,4 @@ function Main( bSendSetupMessage ){
   
 }
 
-Main( false );
+Main( true );
